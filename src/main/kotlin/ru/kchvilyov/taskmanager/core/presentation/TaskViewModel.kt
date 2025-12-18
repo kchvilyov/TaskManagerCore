@@ -54,13 +54,19 @@ class TaskViewModel(
     private suspend fun toggleTask(id: Int) {
         _state.update { it.copy(isLoading = true, error = null) }
         try {
-            val task = repository.getTaskById(id) ?: return
+            val task = repository.getTaskById(id) ?: run {
+                _state.update { it.copy(error = "Task not found", isLoading = false) }
+                return
+            }
             val updatedTask = task.copy(isCompleted = !task.isCompleted)
-            repository.updateTask(updatedTask)
-
-            _state.update { state ->
-                val updatedTasks = state.tasks.map { if (it.id == id) updatedTask else it }
-                state.copy(tasks = updatedTasks, isLoading = false)
+            val success = repository.updateTask(updatedTask)
+            if (success) {
+                _state.update { state ->
+                    val updatedTasks = state.tasks.map { if (it.id == id) updatedTask else it }
+                    state.copy(tasks = updatedTasks, isLoading = false)
+                }
+            } else {
+                _state.update { it.copy(error = "Failed to update task: not found", isLoading = false) }
             }
         } catch (e: Exception) {
             _state.update { it.copy(error = "Failed to update task: ${e.message}", isLoading = false) }

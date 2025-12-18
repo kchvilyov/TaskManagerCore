@@ -33,16 +33,18 @@ class LocalTaskDataSource : TaskRepository {
         tasks.add(task)
     }
 
-    override suspend fun updateTask(task: Task) {
+    override suspend fun updateTask(task: Task): Boolean {
         delay(100)
         val index = tasks.indexOfFirst { it.id == task.id }
         if (index != -1) {
             tasks[index] = task
+            return true
         }
+        return false
     }
 
-    override suspend fun deleteTask(id: Int) {
+    override suspend fun deleteTask(id: Int): Boolean {
         delay(100)
-        tasks.removeIf { it.id == id }
+        return tasks.removeIf { it.id == id } // removeIf возвращает Boolean
     }
 }
