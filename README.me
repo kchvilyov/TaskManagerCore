@@ -62,3 +62,11 @@ text
 │   └── AppContainer.kt
 └── /test
     └── TaskViewModelTest.kt
+
+Интеграция с платформами:
+Android: Данный модуль станет ядром Android-приложения.
+ TaskViewModel будет использован в Jetpack Compose-экране.
+ LocalTaskDataSource будет заменён на реализацию с Room.
+ AppContainer будет переписан с использованием Hilt.
+iOS: Этот модуль может быть скомпилирован в iOS-фреймворк с помощью Kotlin Multiplatform Mobile (KMM).
+ На стороне Swift будет создан UIViewController, подписанный на StateFlow (черед KMM-обёртки), для отображения данных в UITableView/SwiftUI.
