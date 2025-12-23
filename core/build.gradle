@@ -1,0 +1,42 @@
+plugins {
+    kotlin("jvm") version "2.2.20"
+    `maven-publish`
+}
+
+group = "com.example"
+version = "1.0.0"
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    implementation(kotlin("stdlib"))
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+
+    // Test
+    testImplementation(kotlin("test"))
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+}
+
+// Test task
+tasks.test {
+    useJUnitPlatform()
+}
+
+// Publish (опционально)
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = "com.example"
+            artifactId = "taskmanager-core"
+            version = "1.0.0"
+
+            from(components["java"])
+        }
+    }
+}
